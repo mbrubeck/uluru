@@ -109,13 +109,6 @@ impl<T, const N: usize> LRUCache<T, N> {
         self.entries.len()
     }
 
-    /// Returns the number of elements in the cache.
-    #[inline]
-    #[deprecated = "Use the 'len' method instead."]
-    pub fn num_entries(&self) -> usize {
-        self.len()
-    }
-
     /// Returns the front entry in the list (most recently used).
     pub fn front(&self) -> Option<&T> {
         self.entries.get(self.head as usize).map(|e| &e.val)
@@ -206,13 +199,6 @@ impl<T, const N: usize> LRUCache<T, N> {
     /// Evict all elements from the cache.
     pub fn clear(&mut self) {
         self.entries.clear();
-    }
-
-    /// Evict all elements from the cache.
-    #[inline]
-    #[deprecated = "Use the 'clear' method instead."]
-    pub fn evict_all(&mut self) {
-        self.clear();
     }
 
     /// Iterate mutably over the contents of this cache.

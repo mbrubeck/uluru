@@ -1,5 +1,6 @@
 extern crate std;
 
+use quickcheck_macros::quickcheck;
 use self::std::vec::Vec;
 use super::*;
 

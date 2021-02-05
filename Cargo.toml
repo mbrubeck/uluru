@@ -8,6 +8,7 @@ repository = "https://github.com/servo/uluru"
 keywords = ["cache", "linkedlist", "array", "no_std"]
 categories = ["data-structures", "no-std"]
 readme = "README.md"
+edition = "2018"
 
 [lib]
 name = "uluru"

@@ -7,10 +7,10 @@
 
 //! A simple, fast, least-recently-used (LRU) cache.
 //!
-//! `LRUCache` uses a fixed-capacity array for storage. It provides `O(1)` insertion, and `O(n)`
+//! `LruCache` uses a fixed-capacity array for storage. It provides `O(1)` insertion, and `O(n)`
 //! lookup.  It does not require an allocator and can be used in `no_std` crates.
 //!
-//! See the [`LRUCache`](LRUCache) docs for details.
+//! See the [`LruCache`](LruCache) docs for details.
 
 use arrayvec::r#const::ArrayVec;
 
@@ -21,17 +21,17 @@ mod tests;
 
 /// A LRU cache using a statically-sized array for storage.
 ///
-/// `LRUCache` uses a fixed-capacity array for storage. It provides `O(1)` insertion, and `O(n)`
+/// `LruCache` uses a fixed-capacity array for storage. It provides `O(1)` insertion, and `O(n)`
 /// lookup.
 ///
-/// All items are stored inline within the `LRUCache`, so it does not impose any heap allocation or
+/// All items are stored inline within the `LruCache`, so it does not impose any heap allocation or
 /// indirection.  A linked list is used to record the cache order, so the items themselves do not
 /// need to be moved when the order changes.  (This is important for speed if the items are large.)
 ///
 /// # Example
 ///
 /// ```
-/// use uluru::LRUCache;
+/// use uluru::LruCache;
 ///
 /// struct MyValue {
 ///     id: u32,
@@ -39,7 +39,7 @@ mod tests;
 /// }
 ///
 /// // A cache with a capacity of three.
-/// type MyCache = LRUCache<MyValue, 3>;
+/// type MyCache = LruCache<MyValue, 3>;
 ///
 /// // Create an empty cache, then insert some items.
 /// let mut cache = MyCache::default();
@@ -58,7 +58,7 @@ mod tests;
 /// cache.insert(MyValue { id: 4, name: "Mars" });
 /// assert!(cache.find(|x| x.id == 2).is_none());
 /// ```
-pub struct LRUCache<T, const N: usize> {
+pub struct LruCache<T, const N: usize> {
     /// The most-recently-used entry is at index `head`. The entries form a linked list, linked to
     /// each other by indices within the `entries` array.  After an entry is added to the array,
     /// its index never changes, so these links are never invalidated.
@@ -69,7 +69,11 @@ pub struct LRUCache<T, const N: usize> {
     tail: u16,
 }
 
-/// An entry in an LRUCache.
+#[doc(hidden)]
+#[deprecated = "Name changed to LRUCache"]
+pub type LRUCache<T, const N: usize> = LruCache<T, N>;
+
+/// An entry in an LruCache.
 #[derive(Debug, Clone)]
 struct Entry<T> {
     val: T,
@@ -79,9 +83,9 @@ struct Entry<T> {
     next: u16,
 }
 
-impl<T, const N: usize> Default for LRUCache<T, N> {
+impl<T, const N: usize> Default for LruCache<T, N> {
     fn default() -> Self {
-        let cache = LRUCache {
+        let cache = LruCache {
             entries: ArrayVec::new(),
             head: 0,
             tail: 0,
@@ -94,7 +98,7 @@ impl<T, const N: usize> Default for LRUCache<T, N> {
     }
 }
 
-impl<T, const N: usize> LRUCache<T, N> {
+impl<T, const N: usize> LruCache<T, N> {
     /// Returns the number of elements in the cache.
     pub fn len(&self) -> usize {
         self.entries.len()
@@ -252,7 +256,7 @@ impl<T, const N: usize> LRUCache<T, N> {
 }
 
 /* TODO
-impl<T, const N: usize> Clone for LRUCache<T, N>
+impl<T, const N: usize> Clone for LruCache<T, N>
 where
     T: Clone,
 {
@@ -267,12 +271,12 @@ where
 */
 
 /* TODO
-impl<T, const N: usize> fmt::Debug for LRUCache<T, N>
+impl<T, const N: usize> fmt::Debug for LruCache<T, N>
 where
     T: fmt::Debug,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("LRUCache")
+        f.debug_struct("LruCache")
             .field("head", &self.head)
             .field("tail", &self.tail)
             .field("entries", &self.entries)
@@ -281,9 +285,9 @@ where
 }
 */
 
-/// Mutable iterator over values in an LRUCache, from most-recently-used to least-recently-used.
+/// Mutable iterator over values in an LruCache, from most-recently-used to least-recently-used.
 struct IterMut<'a, T, const N: usize> {
-    cache: &'a mut LRUCache<T, N>,
+    cache: &'a mut LruCache<T, N>,
     pos: u16,
 }
 

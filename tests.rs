@@ -4,10 +4,10 @@ use quickcheck_macros::quickcheck;
 use self::std::vec::Vec;
 use super::*;
 
-type TestCache = LRUCache<i32, 4>;
+type TestCache = LruCache<i32, 4>;
 
 /// Convenience function for test assertions
-fn items<T, const N: usize>(cache: &mut LRUCache<T, N>) -> Vec<T>
+fn items<T, const N: usize>(cache: &mut LruCache<T, N>) -> Vec<T>
 where
     T: Clone,
 {
